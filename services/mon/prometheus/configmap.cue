@@ -34,7 +34,7 @@ configMap: prometheus: {
 					alert: "EtcdNoMaster"
 					expr:  "sum(etcd_server_has_leader{app=\"etcd\"}) == 0"
 					for:   "1s"
-					labels: severity: "page"
+					labels: severity:     "page"
 					annotations: summary: "No ETCD master elected."
 				}, {
 					alert: "PodRestart"

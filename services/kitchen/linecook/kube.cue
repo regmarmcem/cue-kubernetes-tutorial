@@ -1,44 +1,18 @@
 package kube
 
 service: linecook: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "linecook"
-		labels: {
-			app:       "linecook"
-			domain:    "prod"
-			component: "kitchen"
-		}
-	}
 	spec: {
 		ports: [{
 			port:       8080
-			protocol:   "TCP"
 			targetPort: 8080
-			name:       "client"
 		}]
-		selector: {
-			app:       "linecook"
-			domain:    "prod"
-			component: "kitchen"
-		}
 	}
 }
 deployment: linecook: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "linecook"
 	spec: {
-		replicas: 1
 		template: {
 			metadata: {
 				annotations: "prometheus.io.scrape": "true"
-				labels: {
-					app:       "linecook"
-					domain:    "prod"
-					component: "kitchen"
-				}
 			}
 			spec: {
 				volumes: [{
@@ -76,8 +50,6 @@ deployment: linecook: {
 						"-recovery-overlap",
 						"100000",
 					]
-
-					name: "linecook"
 					livenessProbe: {
 						httpGet: {
 							path: "/debug/health"

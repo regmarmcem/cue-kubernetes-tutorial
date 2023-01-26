@@ -1,44 +1,18 @@
 package kube
 
 service: expiditer: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "expiditer"
-		labels: {
-			app:       "expiditer"
-			domain:    "prod"
-			component: "kitchen"
-		}
-	}
 	spec: {
 		ports: [{
 			port:       8080
-			protocol:   "TCP"
 			targetPort: 8080
-			name:       "client"
 		}]
-		selector: {
-			app:       "expiditer"
-			domain:    "prod"
-			component: "kitchen"
-		}
 	}
 }
 deployment: expiditer: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "expiditer"
 	spec: {
-		replicas: 1
 		template: {
 			metadata: {
 				annotations: "prometheus.io.scrape": "true"
-				labels: {
-					app:       "expiditer"
-					domain:    "prod"
-					component: "kitchen"
-				}
 			}
 			spec: {
 				volumes: [{
@@ -70,8 +44,6 @@ deployment: expiditer: {
 						"-logdir=/logs",
 						"-event-server=events:7788",
 					]
-
-					name: "expiditer"
 					livenessProbe: {
 						httpGet: {
 							path: "/debug/health"

@@ -1,44 +1,19 @@
 package kube
 
 service: dishwasher: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "dishwasher"
-		labels: {
-			app:       "dishwasher"
-			domain:    "prod"
-			component: "kitchen"
-		}
-	}
 	spec: {
 		ports: [{
 			port:       8080
-			protocol:   "TCP"
 			targetPort: 8080
-			name:       "client"
 		}]
-		selector: {
-			app:       "dishwasher"
-			domain:    "prod"
-			component: "kitchen"
-		}
 	}
 }
 deployment: dishwasher: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "dishwasher"
 	spec: {
 		replicas: 5
 		template: {
 			metadata: {
 				annotations: "prometheus.io.scrape": "true"
-				labels: {
-					app:       "dishwasher"
-					domain:    "prod"
-					component: "kitchen"
-				}
 			}
 			spec: {
 				volumes: [{
@@ -77,8 +52,6 @@ deployment: dishwasher: {
 						"-logdir=/logs",
 						"-event-server=events:7788",
 					]
-
-					name: "dishwasher"
 					livenessProbe: {
 						httpGet: {
 							path: "/debug/health"

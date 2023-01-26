@@ -1,20 +1,10 @@
 package kube
 
 deployment: authproxy: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "authproxy"
 	spec: {
-		replicas: 1
 		// podTemplate defines the 'cookie cutter' used for creating
 		// new pods when necessary
 		template: {
-			metadata: labels: {
-				// Important: these labels need to match the selector above
-				// The api server enforces this constraint.
-				app:    "authproxy"
-				domain: "prod"
-			}
 			spec: {
 				containers: [{
 					image: "skippy/oauth2_proxy:2.0.1"
@@ -24,8 +14,6 @@ deployment: authproxy: {
 					args: [
 						"--config=/etc/authproxy/authproxy.cfg",
 					]
-
-					name: "authproxy"
 					volumeMounts: [{
 						name:      "config-volume"
 						mountPath: "/etc/authproxy"

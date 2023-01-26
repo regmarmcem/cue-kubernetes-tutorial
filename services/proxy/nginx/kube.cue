@@ -1,20 +1,10 @@
 package kube
 
 deployment: nginx: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "nginx"
 	spec: {
-		replicas: 1
 		// podTemplate defines the 'cookie cutter' used for creating
 		// new pods when necessary
 		template: {
-			metadata: labels: {
-				// Important: these labels need to match the selector above
-				// The api server enforces this constraint.
-				app:       "nginx"
-				component: "proxy"
-			}
 			spec: {
 				volumes: [{
 					name: "secret-volume"
@@ -32,7 +22,6 @@ deployment: nginx: {
 					}, {
 						containerPort: 443
 					}]
-					name: "nginx"
 					volumeMounts: [{
 						mountPath: "/etc/ssl"
 						name:      "secret-volume"

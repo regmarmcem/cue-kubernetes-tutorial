@@ -1,11 +1,7 @@
 package kube
 
 deployment: tasks: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "tasks"
 	spec: {
-		replicas: 1
 		// podTemplate defines the 'cookie cutter' used for creating
 		// new pods when necessary
 		template: {
@@ -13,12 +9,6 @@ deployment: tasks: {
 				annotations: {
 					"prometheus.io.scrape": "true"
 					"prometheus.io.port":   "7080"
-				}
-				labels: {
-					// Important: these labels need to match the selector above
-					// The api server enforces this constraint.
-					app:       "tasks"
-					component: "infra"
 				}
 			}
 			spec: {
@@ -33,7 +23,6 @@ deployment: tasks: {
 					}, {
 						containerPort: 7443
 					}]
-					name: "tasks"
 					volumeMounts: [{
 						mountPath: "/etc/ssl"
 						name:      "secret-volume"

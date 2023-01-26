@@ -1,34 +1,15 @@
 package kube
 
 service: events: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "events"
-		labels: {
-			app:       "events"
-			domain:    "prod"
-			component: "infra"
-		}
-	}
 	spec: {
 		ports: [{
 			port:       7788
 			targetPort: 7788
-			protocol:   "TCP"
 			name:       "grpc"
 		}]
-		selector: {
-			app:       "events"
-			domain:    "prod"
-			component: "infra"
-		}
 	}
 }
 deployment: events: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "events"
 	spec: {
 		replicas: 2
 		template: {
@@ -36,13 +17,6 @@ deployment: events: {
 				annotations: {
 					"prometheus.io.scrape": "true"
 					"prometheus.io.port":   "7080"
-				}
-				labels: {
-					// Important: these labels need to match the selector above
-					// The api server enforces this constraint.
-					app:       "events"
-					domain:    "prod"
-					component: "infra"
 				}
 			}
 			spec: {
@@ -72,8 +46,6 @@ deployment: events: {
 						"-key=/etc/ssl/server.key",
 						"-grpc=:7788",
 					]
-
-					name: "events"
 					volumeMounts: [{
 						mountPath: "/etc/ssl"
 						name:      "secret-volume"

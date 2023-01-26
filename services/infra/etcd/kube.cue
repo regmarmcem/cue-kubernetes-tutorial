@@ -1,29 +1,16 @@
 package kube
 
 service: etcd: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "etcd"
-		labels: {
-			app:       "etcd"
-			component: "infra"
-		}
-	}
 	spec: {
 		clusterIP: "None"
 		ports: [{
 			port:       2379
-			protocol:   "TCP"
 			targetPort: 2379
-			name:       "client"
 		}, {
 			port:       2380
 			targetPort: 2380
-			protocol:   "TCP"
 			name:       "peer"
 		}]
-		selector: app: "etcd"
 	}
 }
 statefulSet: etcd: {

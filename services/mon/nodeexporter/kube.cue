@@ -1,22 +1,16 @@
 package kube
 
 service: "node-exporter": {
-	apiVersion: "v1"
-	kind:       "Service"
 	metadata: {
 		annotations: "prometheus.io/scrape": "true"
-		name: "node-exporter"
-		labels: app: "node-exporter"
 	}
 	spec: {
 		type:      "ClusterIP"
 		clusterIP: "None"
 		ports: [{
-			name:     "metrics"
-			port:     9100
-			protocol: "TCP"
+			name: "metrics"
+			port: 9100
 		}]
-		selector: app: "node-exporter"
 	}
 }
 daemonSet: "node-exporter": {

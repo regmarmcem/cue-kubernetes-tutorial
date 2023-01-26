@@ -1,21 +1,10 @@
 package kube
 
 deployment: watcher: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "watcher"
 	spec: {
-		replicas: 1
 		// podTemplate defines the 'cookie cutter' used for creating
 		// new pods when necessary
 		template: {
-			metadata: labels: {
-				// Important: these labels need to match the selector above
-				// The api server enforces this constraint.
-				app:       "watcher"
-				domain:    "prod"
-				component: "infra"
-			}
 			spec: {
 				volumes: [{
 					name: "secret-volume"
@@ -28,7 +17,6 @@ deployment: watcher: {
 					}, {
 						containerPort: 7788
 					}]
-					name: "watcher"
 					volumeMounts: [{
 						mountPath: "/etc/ssl"
 						name:      "secret-volume"

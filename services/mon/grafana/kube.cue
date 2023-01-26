@@ -1,22 +1,14 @@
 package kube
 
 deployment: grafana: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
 	metadata: {
 		labels: {
 			app:       "grafana"
 			component: "mon"
 		}
-		name: "grafana"
 	}
 	spec: {
-		replicas: 1
 		template: {
-			metadata: labels: {
-				app:       "grafana"
-				component: "mon"
-			}
 			spec: {
 				volumes: [{
 					name: "grafana-volume"
@@ -57,7 +49,6 @@ deployment: grafana: {
 						name:  "GF_AUTH_ANONYMOUS_ORG_ROLE"
 						value: "admin"
 					}]
-					name: "grafana"
 					volumeMounts: [{
 						name:      "grafana-volume"
 						mountPath: "/var/lib/grafana"
@@ -68,25 +59,11 @@ deployment: grafana: {
 	}
 }
 service: grafana: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "grafana"
-		labels: {
-			app:       "grafana"
-			component: "mon"
-		}
-	}
 	spec: {
 		ports: [{
 			name:       "grafana"
 			port:       3000
-			protocol:   "TCP"
 			targetPort: 3000
 		}]
-		selector: {
-			app:       "grafana"
-			component: "mon"
-		}
 	}
 }

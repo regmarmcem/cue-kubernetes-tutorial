@@ -1,44 +1,18 @@
 package kube
 
 service: headchef: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "headchef"
-		labels: {
-			app:       "headchef"
-			domain:    "prod"
-			component: "kitchen"
-		}
-	}
 	spec: {
 		ports: [{
 			port:       8080
-			protocol:   "TCP"
 			targetPort: 8080
-			name:       "client"
 		}]
-		selector: {
-			app:       "headchef"
-			domain:    "prod"
-			component: "kitchen"
-		}
 	}
 }
 deployment: headchef: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "headchef"
 	spec: {
-		replicas: 1
 		template: {
 			metadata: {
 				annotations: "prometheus.io.scrape": "true"
-				labels: {
-					app:       "headchef"
-					domain:    "prod"
-					component: "kitchen"
-				}
 			}
 			spec: {
 				volumes: [{
@@ -69,8 +43,6 @@ deployment: headchef: {
 						"-logdir=/logs",
 						"-event-server=events:7788",
 					]
-
-					name: "headchef"
 					livenessProbe: {
 						httpGet: {
 							path: "/debug/health"

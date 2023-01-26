@@ -1,37 +1,26 @@
 package kube
 
 service: alertmanager: {
-	apiVersion: "v1"
-	kind:       "Service"
 	metadata: {
 		annotations: {
 			"prometheus.io/scrape": "true"
 			"prometheus.io/path":   "/metrics"
 		}
-		name: "alertmanager"
-		labels: app: "alertmanager"
 	}
 	spec: {
 		ports: [{
 			name:       "main"
 			port:       9093
-			protocol:   "TCP"
 			targetPort: 9093
 		}]
-		selector: app: "alertmanager"
 	}
 }
 deployment: alertmanager: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "alertmanager"
 	spec: {
 		selector: matchLabels: app: "alertmanager"
-		replicas: 1
 		template: {
 			metadata: {
 				name: "alertmanager"
-				labels: app: "alertmanager"
 			}
 			spec: {
 				containers: [{
@@ -45,7 +34,6 @@ deployment: alertmanager: {
 						name:          "alertmanager"
 						containerPort: 9093
 					}]
-					name: "alertmanager"
 					volumeMounts: [{
 						name:      "config-volume"
 						mountPath: "/etc/alertmanager"

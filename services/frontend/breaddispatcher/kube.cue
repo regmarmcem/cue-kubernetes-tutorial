@@ -1,46 +1,20 @@
 package kube
 
 service: breaddispatcher: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "breaddispatcher"
-		labels: {
-			app:       "breaddispatcher"
-			domain:    "prod"
-			component: "frontend"
-		}
-	}
 	spec: {
 		ports: [{
 			port:       7080
-			protocol:   "TCP"
 			targetPort: 7080
-			name:       "client"
 		}]
-		selector: {
-			app:       "breaddispatcher"
-			domain:    "prod"
-			component: "frontend"
-		}
 	}
 }
 deployment: breaddispatcher: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "breaddispatcher"
 	spec: {
-		replicas: 1
 		template: {
 			metadata: {
 				annotations: {
 					"prometheus.io.scrape": "true"
 					"prometheus.io.port":   "7080"
-				}
-				labels: {
-					app:       "breaddispatcher"
-					domain:    "prod"
-					component: "frontend"
 				}
 			}
 			spec: containers: [{
@@ -48,7 +22,6 @@ deployment: breaddispatcher: {
 				ports: [{
 					containerPort: 7080
 				}]
-				name: "breaddispatcher"
 				args: [
 					"-etcd=etcd:2379",
 					"-event-server=events:7788",

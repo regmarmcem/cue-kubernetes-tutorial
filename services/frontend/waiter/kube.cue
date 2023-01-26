@@ -1,30 +1,14 @@
 package kube
 
 service: waiter: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "waiter"
-		labels: {
-			app:       "waiter"
-			domain:    "prod"
-			component: "frontend"
-		}
-	}
 	spec: {
 		ports: [{
 			port:       7080
-			protocol:   "TCP"
 			targetPort: 7080
-			name:       "client"
 		}]
-		selector: app: "waiter"
 	}
 }
 deployment: waiter: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "waiter"
 	spec: {
 		replicas: 5
 		template: {
@@ -33,15 +17,9 @@ deployment: waiter: {
 					"prometheus.io.scrape": "true"
 					"prometheus.io.port":   "7080"
 				}
-				labels: {
-					app:       "waiter"
-					domain:    "prod"
-					component: "frontend"
-				}
 			}
 			spec: containers: [{
 				image: "gcr.io/myproj/waiter:v0.3.0"
-				name:  "waiter"
 				ports: [{
 					containerPort: 7080
 				}]

@@ -1,28 +1,19 @@
 package kube
 
 service: prometheus: {
-	apiVersion: "v1"
-	kind:       "Service"
 	metadata: {
 		annotations: "prometheus.io/scrape": "true"
-		name: "prometheus"
-		labels: app: "prometheus"
 	}
 	spec: {
 		type: "NodePort"
 		ports: [{
 			name:     "main"
 			port:     9090
-			protocol: "TCP"
 			nodePort: 30900
 		}]
-		selector: app: "prometheus"
 	}
 }
 deployment: prometheus: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "prometheus"
 	spec: {
 		strategy: {
 			rollingUpdate: {
@@ -32,11 +23,9 @@ deployment: prometheus: {
 			type: "RollingUpdate"
 		}
 		selector: matchLabels: app: "prometheus"
-		replicas: 1
 		template: {
 			metadata: {
 				name: "prometheus"
-				labels: app: "prometheus"
 				annotations: "prometheus.io.scrape": "true"
 			}
 			spec: {
@@ -50,7 +39,6 @@ deployment: prometheus: {
 						name:          "web"
 						containerPort: 9090
 					}]
-					name: "prometheus"
 					volumeMounts: [{
 						name:      "config-volume"
 						mountPath: "/etc/prometheus"

@@ -1,43 +1,19 @@
 package kube
 
 service: caller: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "caller"
-		labels: {
-			app:       "caller"
-			domain:    "prod"
-			component: "kitchen"
-		}
-	}
 	spec: {
 		ports: [{
 			port:       8080
-			protocol:   "TCP"
 			targetPort: 8080
-			name:       "client"
 		}]
-		selector: {
-			app:    "caller"
-			domain: "prod"
-		}
 	}
 }
 deployment: caller: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "caller"
 	spec: {
 		replicas: 3
 		template: {
 			metadata: {
 				annotations: "prometheus.io.scrape": "true"
-				labels: {
-					app:       "caller"
-					domain:    "prod"
-					component: "kitchen"
-				}
 			}
 			spec: {
 				volumes: [{
@@ -80,8 +56,6 @@ deployment: caller: {
 						"-logdir=/logs",
 						"-event-server=events:7788",
 					]
-
-					name: "caller"
 					livenessProbe: {
 						httpGet: {
 							path: "/debug/health"

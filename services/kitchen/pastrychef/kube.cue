@@ -1,44 +1,18 @@
 package kube
 
 service: pastrychef: {
-	apiVersion: "v1"
-	kind:       "Service"
-	metadata: {
-		name: "pastrychef"
-		labels: {
-			app:       "pastrychef"
-			domain:    "prod"
-			component: "kitchen"
-		}
-	}
 	spec: {
 		ports: [{
 			port:       8080
-			protocol:   "TCP"
 			targetPort: 8080
-			name:       "client"
 		}]
-		selector: {
-			app:       "pastrychef"
-			domain:    "prod"
-			component: "kitchen"
-		}
 	}
 }
 deployment: pastrychef: {
-	apiVersion: "apps/v1"
-	kind:       "Deployment"
-	metadata: name: "pastrychef"
 	spec: {
-		replicas: 1
 		template: {
 			metadata: {
 				annotations: "prometheus.io.scrape": "true"
-				labels: {
-					app:       "pastrychef"
-					domain:    "prod"
-					component: "kitchen"
-				}
 			}
 			spec: {
 				volumes: [{
@@ -73,8 +47,6 @@ deployment: pastrychef: {
 						"-etcd=etcd:2379",
 						"-recovery-overlap=10000",
 					]
-
-					name: "pastrychef"
 					livenessProbe: {
 						httpGet: {
 							path: "/debug/health"
